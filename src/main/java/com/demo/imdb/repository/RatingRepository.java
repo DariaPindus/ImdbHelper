@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 //TODO: nyzhen voobzhe?
 public interface RatingRepository extends JpaRepository<Rating, Long> {
+
 }

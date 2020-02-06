@@ -29,7 +29,7 @@ public class Movie {
     @Getter @Setter
     private String genres;
 
-    @OneToOne(mappedBy = "movie")
+    @OneToOne
     @Getter @Setter
     private Rating rating;
 
@@ -40,6 +40,6 @@ public class Movie {
     public Movie(String id, @NotBlank String name, String genres) {
         this.id = id;
         this.name = name;
-        this.genres = genres;
+        this.genres = genres.toLowerCase();
     }
 }

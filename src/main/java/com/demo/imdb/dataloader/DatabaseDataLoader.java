@@ -3,16 +3,20 @@ package com.demo.imdb.dataloader;
 import com.demo.imdb.model.Movie;
 import com.demo.imdb.model.MoviePosition;
 import com.demo.imdb.model.Person;
+import com.demo.imdb.model.Rating;
 import com.demo.imdb.repository.MoviePositionRepository;
 import com.demo.imdb.repository.MovieRepository;
 import com.demo.imdb.repository.PersonRepository;
 import com.demo.imdb.service.MoviePositionService;
+import com.demo.imdb.service.RatingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /*
  * order of data loading :
@@ -33,10 +37,19 @@ public class DatabaseDataLoader implements ApplicationRunner {
     @Autowired
     private MoviePositionService moviePositionService;
 
+    @Autowired
+    private MoviePositionRepository moviePositionRepository;
+
+    @Autowired
+    private RatingService ratingService;
+
     public void run(ApplicationArguments args) throws Exception {
         loadMovies();
         loadPersons();
         loadMoviePositions();
+        loadRating();
+
+        check();
     }
 
     private void loadMovies() throws Exception {
@@ -62,7 +75,22 @@ public class DatabaseDataLoader implements ApplicationRunner {
         } );
     }
 
+    private void loadRating() throws Exception {
+        TSVDataSource<Rating> ratingParser = new TSVDataSource<>("/datasource/test_rating.tsv",
+                record -> new Rating(new Movie(record.getString("tconst")), record.getDouble("averageRating"), record.getLong("numVotes")));
+        ratingParser.getItems().forEach(item -> {
+            try {ratingService.save(item); }
+            catch (IllegalStateException e) {
+                logger.error("Couldn't save rating for movie " + item.getMovie().getId());
+            }
+        } );
+    }
+
     private void check() {
-        personRepository.findAll();
+        //List<Person> people = personRepository.findAll();
+        //List<MoviePosition>  moviePositions = moviePositionRepository.findByPersonMovie("Fred Astaire");
+        //List<Movie> result = movieRepository.findPersonMovie("Fred Astaire");
+        List<Movie> rated = movieRepository.findTopRatedMoviesByGenre("Short");
+        System.out.println("");
     }
 }

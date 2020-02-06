@@ -20,7 +20,7 @@ public class Person {
     private String name;
 
     @OneToMany(mappedBy = "person")
-    @Getter @Setter
+    @Getter
     private Set<MoviePosition> movies;
 
     public Person(String id) {
@@ -29,6 +29,6 @@ public class Person {
 
     public Person(String id, String name) {
         this.id = id;
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 }
