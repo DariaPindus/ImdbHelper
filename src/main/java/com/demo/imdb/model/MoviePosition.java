@@ -15,10 +15,10 @@ public class MoviePosition {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Person person;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Movie movie;
 
     @NotBlank

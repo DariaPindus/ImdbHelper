@@ -30,6 +30,7 @@ public class TSVDataSource<T> implements DataSource<T> {
     private void setParser() {
         TsvParserSettings settings = new TsvParserSettings();
         settings.getFormat().setLineSeparator("\n");
+        settings.setHeaderExtractionEnabled(true);
         parser = new TsvParser(settings);
     }
 

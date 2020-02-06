@@ -26,9 +26,8 @@ public class Movie {
     @Getter
     private Set<MoviePosition> cast;
 
-    @ManyToMany
     @Getter @Setter
-    private Set<Genre> genres;
+    private String genres;
 
     @OneToOne(mappedBy = "movie")
     @Getter @Setter
@@ -38,7 +37,7 @@ public class Movie {
         this.id = id;
     }
 
-    public Movie(String id, @NotBlank String name, Set<Genre> genres) {
+    public Movie(String id, @NotBlank String name, String genres) {
         this.id = id;
         this.name = name;
         this.genres = genres;

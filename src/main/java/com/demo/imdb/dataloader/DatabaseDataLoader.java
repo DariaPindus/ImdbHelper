@@ -38,7 +38,8 @@ public class DatabaseDataLoader implements ApplicationRunner {
     }
 
     public void loadMovies() throws Exception {
-        TSVDataSource<Movie> moviesParser = new TSVDataSource<>("/datasource/test_movies.tsv",new MovieParser());
+        TSVDataSource<Movie> moviesParser = new TSVDataSource<>("/datasource/test_movies.tsv",
+                record -> new Movie(record.getString("tconst"), record.getString("primaryTitle"), record.getString("genres")));
         movieRepository.saveAll(moviesParser.getItems());
     }
 
