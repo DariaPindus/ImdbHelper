@@ -13,12 +13,16 @@ import javax.validation.constraints.NotBlank;
 public class MoviePosition {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
+    @Getter
     private Person person;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    //TODO: check cascade type(cascade = CascadeType.MERGE)
+    @ManyToOne
+    @Getter
     private Movie movie;
 
     @NotBlank

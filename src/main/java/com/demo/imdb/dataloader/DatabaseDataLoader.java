@@ -6,13 +6,13 @@ import com.demo.imdb.model.Person;
 import com.demo.imdb.repository.MoviePositionRepository;
 import com.demo.imdb.repository.MovieRepository;
 import com.demo.imdb.repository.PersonRepository;
+import com.demo.imdb.service.MoviePositionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import java.io.UnsupportedEncodingException;
-
 
 /*
  * order of data loading :
@@ -22,6 +22,8 @@ import java.io.UnsupportedEncodingException;
 @Component
 public class DatabaseDataLoader implements ApplicationRunner {
 
+    Logger logger = LoggerFactory.getLogger(DatabaseDataLoader.class);
+
     @Autowired
     private MovieRepository movieRepository;
 
@@ -29,7 +31,7 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private PersonRepository personRepository;
 
     @Autowired
-    private MoviePositionRepository moviePositionRepository;
+    private MoviePositionService moviePositionService;
 
     public void run(ApplicationArguments args) throws Exception {
         loadMovies();
@@ -37,22 +39,27 @@ public class DatabaseDataLoader implements ApplicationRunner {
         loadMoviePositions();
     }
 
-    public void loadMovies() throws Exception {
+    private void loadMovies() throws Exception {
         TSVDataSource<Movie> moviesParser = new TSVDataSource<>("/datasource/test_movies.tsv",
                 record -> new Movie(record.getString("tconst"), record.getString("primaryTitle"), record.getString("genres")));
         movieRepository.saveAll(moviesParser.getItems());
     }
 
-    public void loadPersons() throws Exception {
+    private void loadPersons() throws Exception {
         TSVDataSource<Person> personParser = new TSVDataSource<>("/datasource/test_actors.tsv",
                 record -> new Person(record.getString("nconst"), record.getString("primaryName")));
         personRepository.saveAll(personParser.getItems());
     }
 
-    public void loadMoviePositions() throws Exception {
+    private void loadMoviePositions() throws Exception {
         TSVDataSource<MoviePosition> positions = new TSVDataSource<>("/datasource/test_crew.tsv",
                 record -> new MoviePosition(new Person(record.getString("nconst")), new Movie(record.getString("tconst")), record.getString("category")));
-        moviePositionRepository.saveAll(positions.getItems());
+        positions.getItems().forEach(item -> {
+            try {moviePositionService.save(item); }
+            catch (IllegalStateException e) {
+                logger.error("Couldn't save moviePosition for movie " + item.getMovie().getId() + ", postition " + item.getPerson().getId());
+            }
+        } );
     }
 
     private void check() {
