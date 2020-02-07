@@ -26,8 +26,9 @@ public class Movie {
     @Getter
     private Set<MoviePosition> cast;
 
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Getter @Setter
-    private String genres;
+    private Set<Genre> genres;
 
     @OneToOne
     @Getter @Setter
@@ -37,9 +38,14 @@ public class Movie {
         this.id = id;
     }
 
-    public Movie(String id, @NotBlank String name, String genres) {
+    public Movie(String id, @NotBlank String name) {
         this.id = id;
         this.name = name;
-        this.genres = genres.toLowerCase();
+    }
+
+    public Movie(String id, @NotBlank String name, Set<Genre> genres) {
+        this.id = id;
+        this.name = name;
+        this.genres = genres;
     }
 }

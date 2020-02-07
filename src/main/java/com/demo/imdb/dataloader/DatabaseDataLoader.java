@@ -4,10 +4,9 @@ import com.demo.imdb.model.Movie;
 import com.demo.imdb.model.MoviePosition;
 import com.demo.imdb.model.Person;
 import com.demo.imdb.model.Rating;
-import com.demo.imdb.repository.MoviePositionRepository;
-import com.demo.imdb.repository.MovieRepository;
 import com.demo.imdb.repository.PersonRepository;
 import com.demo.imdb.service.MoviePositionService;
+import com.demo.imdb.service.MovieService;
 import com.demo.imdb.service.RatingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +28,13 @@ public class DatabaseDataLoader implements ApplicationRunner {
     Logger logger = LoggerFactory.getLogger(DatabaseDataLoader.class);
 
     @Autowired
-    private MovieRepository movieRepository;
+    private MovieService movieService;
 
     @Autowired
     private PersonRepository personRepository;
 
     @Autowired
     private MoviePositionService moviePositionService;
-
-    @Autowired
-    private MoviePositionRepository moviePositionRepository;
 
     @Autowired
     private RatingService ratingService;
@@ -53,9 +49,8 @@ public class DatabaseDataLoader implements ApplicationRunner {
     }
 
     private void loadMovies() throws Exception {
-        TSVDataSource<Movie> moviesParser = new TSVDataSource<>("/datasource/test_movies.tsv",
-                record -> new Movie(record.getString("tconst"), record.getString("primaryTitle"), record.getString("genres")));
-        movieRepository.saveAll(moviesParser.getItems());
+        TSVDataSource<Movie> moviesParser = new TSVDataSource<>("/datasource/test_movies.tsv", new MovieParser());
+        moviesParser.getItems().forEach(movie -> movieService.save(movie));
     }
 
     private void loadPersons() throws Exception {
@@ -89,8 +84,8 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private void check() {
         //List<Person> people = personRepository.findAll();
         //List<MoviePosition>  moviePositions = moviePositionRepository.findByPersonMovie("Fred Astaire");
-        //List<Movie> result = movieRepository.findPersonMovie("Fred Astaire");
-        List<Movie> rated = movieRepository.findTopRatedMoviesByGenre("Short");
+        List<Movie> result = movieService.findPersonMovie("Fred Astaire");
+        List<Movie> rated = movieService.findTopRatedMoviesByGenre("Short");
         System.out.println("");
     }
 }

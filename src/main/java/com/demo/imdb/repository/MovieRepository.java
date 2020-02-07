@@ -14,7 +14,7 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     @Override
     Optional<Movie> findById(String s);
 
-    @Query("select m from Movie m join m.rating r where m.genres like %?1% order by r.averageRating desc ")
+    @Query("select m from Movie m join m.genres g join m.rating r where g.name like %?1% order by r.averageRating desc ")
     List<Movie> findTopRatedMoviesByGenre(String genre);
 
     @Query("select m from Movie m join m.cast c join c.person p where p.name like %?1% ")

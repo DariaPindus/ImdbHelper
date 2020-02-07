@@ -24,6 +24,6 @@ public class Genre {
     private String name;
 
     public Genre(@NotBlank String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 }
