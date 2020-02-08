@@ -4,7 +4,6 @@ tt0000001	2	nm0000002	director	\N	\N
 tt0000001	3	nm0000006	cinematographer	director of photography	\N
 tt0000002	1	nm0000009	director	\N	\N
 tt0000002	2	nm0000001	composer	\N	\N
-tt0000003	1	nm0000006	director	\N	\N
 tt0000003	2	nm0000008	producer	producer	\N
 tt0000003	3	nm0000003	composer	\N	\N
 tt0000003	4	nm0000001	editor	\N	\N
@@ -31,13 +30,8 @@ tt0000010	1	nm0000010	director	\N	\N
 tt0000011	1	nm0000001	actor	\N	"[""Acrobats""]"
 tt0000011	2	nm0000003	director	\N	\N
 tt0000012	1	nm0000007	self	\N	"[""Herself""]"
-tt0000012	2	nm0000004	self	\N	"[""Himself""]"
+tt0000012	2	nm0000011	self	\N	"[""Himself""]"
 tt0000012	3	nm0000005	self	\N	"[""Herself""]"
-tt0000012	4	nm0000003	self	\N	"[""Herself""]"
-tt0000012	5	nm0000003	director	\N	\N
-tt0000012	6	nm0000008	director	\N	\N
-tt0000012	7	nm0000008	self	\N	"[""Herself""]"
-tt0000012	8	nm0000002	self	\N	"[""Herself""]"
 tt0000013	1	nm0000004	self	\N	"[""Himself""]"
 tt0000013	2	nm0000004	self	\N	"[""Himself""]"
 tt0000013	3	nm0000002	director	\N	\N

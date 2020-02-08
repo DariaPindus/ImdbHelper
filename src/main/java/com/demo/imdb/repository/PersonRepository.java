@@ -26,6 +26,6 @@ public interface PersonRepository extends JpaRepository<Person, String> {
     @Query("select count(m.movie) from Person p join p.movies m where p.name like %?1%")
     long countPersonMovies(String name);
 
-    @Query("select distinct p from Person p join p.movies pm where pm.movie in (select mp.movie from MoviePosition mp where mp.person.id=?1)")
+    @Query("select distinct p from Person p join p.movies pm where pm.movie in (select mp.movie from MoviePosition mp where mp.person.id=?1) and p.id <> ?1")
     List<Person> getAllCostars(String id);
 }
