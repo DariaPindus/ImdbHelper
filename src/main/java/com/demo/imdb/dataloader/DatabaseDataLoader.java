@@ -4,9 +4,9 @@ import com.demo.imdb.model.Movie;
 import com.demo.imdb.model.MoviePosition;
 import com.demo.imdb.model.Person;
 import com.demo.imdb.model.Rating;
-import com.demo.imdb.repository.PersonRepository;
 import com.demo.imdb.service.MoviePositionService;
 import com.demo.imdb.service.MovieService;
+import com.demo.imdb.service.PersonService;
 import com.demo.imdb.service.RatingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private MovieService movieService;
 
     @Autowired
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     @Autowired
     private MoviePositionService moviePositionService;
@@ -56,7 +56,7 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private void loadPersons() throws Exception {
         TSVDataSource<Person> personParser = new TSVDataSource<>("/datasource/test_actors.tsv",
                 record -> new Person(record.getString("nconst"), record.getString("primaryName")));
-        personRepository.saveAll(personParser.getItems());
+        personService.saveAll(personParser.getItems());
     }
 
     private void loadMoviePositions() throws Exception {
@@ -82,10 +82,11 @@ public class DatabaseDataLoader implements ApplicationRunner {
     }
 
     private void check() {
-        //List<Person> people = personRepository.findAll();
+        //List<Person> people = personService.findAll();
         //List<MoviePosition>  moviePositions = moviePositionRepository.findByPersonMovie("Fred Astaire");
         List<Movie> result = movieService.findPersonMovie("Fred Astaire");
-        List<Movie> rated = movieService.findTopRatedMoviesByGenre("Short");
+        //List<Movie> rated = movieService.findTopRatedMoviesByGenre("Short");
+        boolean typecasted = personService.isPersonTypecasted("Fred Astaire");
         System.out.println("");
     }
 }
