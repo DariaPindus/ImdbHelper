@@ -24,25 +24,6 @@ public class PersonRelationshipSearcher implements RelationshipSearcher {
         return found ? relationshipDepth : -1;
     }
 
-    //v1
-    /*private void findRelationshipDegreeInternal() {
-        String parent = nodeQueue.poll();
-
-        if (processed.contains(parent))
-            return;
-
-        processed.add(parent);
-        List<String> children = loader.loadChildren(parent);
-
-        for (String child : children) {
-            if (child.equals(goal))
-                return;
-            else nodeQueue.add(child);
-        }
-
-        findRelationshipDegreeInternal();
-    }
-*/
     private void findRelationshipDegreeInternal() {
 
         while (!nodeQueue.isEmpty()) {

@@ -5,6 +5,8 @@ import com.demo.imdb.model.Movie;
 import com.demo.imdb.repository.GenreRepository;
 import com.demo.imdb.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
+
+    private final static Pageable TOP_RATED_PAGE_REQUEST = PageRequest.of(0, 10);
 
     @Autowired
     private MovieRepository movieRepository;
@@ -34,7 +38,7 @@ public class MovieService {
 
     //TODO: slice results
     public List<Movie> findTopRatedMoviesByGenre(String genre) {
-        return movieRepository.findTopRatedMoviesByGenre(genre.toLowerCase());
+        return movieRepository.findTopRatedMoviesByGenre(genre.toLowerCase(), TOP_RATED_PAGE_REQUEST);
     }
 
     public List<Movie> findPersonMovie(String name){
