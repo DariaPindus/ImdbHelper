@@ -86,7 +86,8 @@ public class DatabaseDataLoader implements ApplicationRunner {
         //List<MoviePosition>  moviePositions = moviePositionRepository.findByPersonMovie("Fred Astaire");
         List<Movie> result = movieService.findPersonMovie("Fred Astaire");
         //List<Movie> rated = movieService.findTopRatedMoviesByGenre("Short");
-        boolean typecasted = personService.isPersonTypecasted("Fred Astaire");
+        //boolean typecasted = personService.isPersonTypecasted("Fred Astaire");
+        int degree = personService.KevinBaconSeparationDegrees("Richard Burton");
         System.out.println("");
     }
 }

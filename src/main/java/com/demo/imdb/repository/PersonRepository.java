@@ -16,6 +16,8 @@ public interface PersonRepository extends JpaRepository<Person, String> {
     @Override
     Optional<Person> findById(String s);
 
+    Optional<Person> findOptionalByName(String name);
+
     @Query("select new com.demo.imdb.model.TypecastResult(g.name, count(p.id))" +
             "from Person p join p.movies mp join mp.movie m join m.genres g " +
             " where p.name like %?1% group by g.name ")
@@ -23,4 +25,7 @@ public interface PersonRepository extends JpaRepository<Person, String> {
 
     @Query("select count(m.movie) from Person p join p.movies m where p.name like %?1%")
     long countPersonMovies(String name);
+
+    @Query("select distinct p from Person p join p.movies pm where pm.movie in (select mp.movie from MoviePosition mp where mp.person.id=?1)")
+    List<Person> getAllCostars(String id);
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -25,5 +26,16 @@ public class PersonService {
     @Transactional
     public Iterable<Person> saveAll(Iterable<Person> people) {
         return personRepository.saveAll(people);
+    }
+
+    @Transactional
+    public int KevinBaconSeparationDegrees(String name) {
+        Optional<Person> person = personRepository.findOptionalByName(name.toLowerCase());
+
+        if (!person.isPresent())
+            return 0;
+
+        List<Person> coStars = personRepository.getAllCostars(person.get().getId());
+        return coStars.size();
     }
 }
