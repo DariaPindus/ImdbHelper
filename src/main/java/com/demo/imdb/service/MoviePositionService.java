@@ -36,10 +36,4 @@ public class MoviePositionService {
         persistedPerson.get().getMovies().add(moviePosition);
         return moviePositionRepository.save(new MoviePosition(moviePosition.getPerson(), persistedMovie.get(), moviePosition.getPosition()));
     }
-
-    @Transactional
-    //TODO: delete
-    public void hardDelete() {
-        moviePositionRepository.deleteAll();
-    }
 }

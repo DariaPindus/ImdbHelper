@@ -8,19 +8,10 @@ import com.demo.imdb.service.MoviePositionService;
 import com.demo.imdb.service.MovieService;
 import com.demo.imdb.service.PersonService;
 import com.demo.imdb.service.RatingService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-
-/*
- * order of data loading :
- * actors -> movies ->
- * */
 
 @Component
 public class DatabaseDataLoader implements ApplicationRunner {
@@ -38,12 +29,10 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private RatingService ratingService;
 
     public void run(ApplicationArguments args) throws Exception {
-        //loadMovies();
-        //loadPersons();
-        //loadMoviePositions();
-        //loadRating();
-
-        check();
+        loadMovies();
+        loadPersons();
+        loadMoviePositions();
+        loadRating();
     }
 
     private void loadMovies() throws Exception {
@@ -78,15 +67,5 @@ public class DatabaseDataLoader implements ApplicationRunner {
                 record -> new Rating(new Movie(record.getString("tconst")), record.getDouble("averageRating"), record.getLong("numVotes")),
                 rating -> ratingService.save(rating));
         ratingLoader.loadItems();
-    }
-
-    private void check() {
-        //List<Person> people = personService.findAll();
-        //List<MoviePosition>  moviePositions = moviePositionRepository.findByPersonMovie("Fred Astaire");
-        List<Movie> result = movieService.findPersonMovie("Fred Astaire");
-        //List<Movie> rated = movieService.findTopRatedMoviesByGenre("Short");
-        //boolean typecasted = personService.isPersonTypecasted("Fred Astaire");
-        int degree = personService.KevinBaconSeparationDegrees("Richard Burton");
-        System.out.println("");
     }
 }

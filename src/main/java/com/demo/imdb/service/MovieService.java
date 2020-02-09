@@ -30,18 +30,15 @@ public class MovieService {
     public Movie save(Movie movie) {
         Set<Genre> persistedGenres =
                 movie.getGenres().stream()
+                        .filter(genre -> !genre.getName().equals("\\N"))
                         .map(genre -> genreRepository.findOptionalByName(genre.getName()).orElse(genre))
                         .collect(Collectors.toSet());
         movie.setGenres(persistedGenres);
         return movieRepository.save(movie);
     }
 
-    //TODO: slice results
+    @Transactional
     public List<Movie> findTopRatedMoviesByGenre(String genre) {
         return movieRepository.findTopRatedMoviesByGenre(genre.toLowerCase(), TOP_RATED_PAGE_REQUEST);
-    }
-
-    public List<Movie> findPersonMovie(String name){
-        return movieRepository.findPersonMovie(name.toLowerCase());
     }
 }

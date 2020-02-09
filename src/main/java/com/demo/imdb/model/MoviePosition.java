@@ -9,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @NoArgsConstructor
-//TODO: rename??
 public class MoviePosition {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -20,7 +19,6 @@ public class MoviePosition {
     @Getter
     private Person person;
 
-    //TODO: check cascade type(cascade = CascadeType.MERGE)
     @ManyToOne
     @Getter
     private Movie movie;
