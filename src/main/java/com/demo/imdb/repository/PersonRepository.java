@@ -16,7 +16,7 @@ public interface PersonRepository extends JpaRepository<Person, String> {
     @Override
     Optional<Person> findById(String s);
 
-    Optional<Person> findOptionalByName(String name);
+    Optional<Person> findFirstByName(String name);
 
     @Query("select new com.demo.imdb.model.TypecastResult(g.name, count(p.id))" +
             "from Person p join p.movies mp join mp.movie m join m.genres g " +

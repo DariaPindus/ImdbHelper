@@ -25,8 +25,6 @@ import java.util.List;
 @Component
 public class DatabaseDataLoader implements ApplicationRunner {
 
-    Logger logger = LoggerFactory.getLogger(DatabaseDataLoader.class);
-
     @Autowired
     private MovieService movieService;
 
@@ -40,45 +38,46 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private RatingService ratingService;
 
     public void run(ApplicationArguments args) throws Exception {
-        loadMovies();
-        loadPersons();
-        loadMoviePositions();
-        loadRating();
+        //loadMovies();
+        //loadPersons();
+        //loadMoviePositions();
+        //loadRating();
 
         check();
     }
 
     private void loadMovies() throws Exception {
-        TSVDataSource<Movie> moviesParser = new TSVDataSource<>("/datasource/test_movies.tsv", new MovieParser());
-        moviesParser.getItems().forEach(movie -> movieService.save(movie));
+        TSVDataLoader<Movie> movieLoader = new TSVDataLoader<>(
+                "/datasource/title_basics_data.tsv",
+                new MovieParser(),
+                movie -> movieService.save(movie));
+        movieLoader.loadItems();
     }
 
     private void loadPersons() throws Exception {
-        TSVDataSource<Person> personParser = new TSVDataSource<>("/datasource/test_actors.tsv",
-                record -> new Person(record.getString("nconst"), record.getString("primaryName")));
-        personService.saveAll(personParser.getItems());
+        TSVDataLoader<Person> personLoader = new TSVDataLoader<>(
+                "/datasource/name_basics_data.tsv",
+                record -> new Person(record.getString("nconst"), record.getString("primaryName")),
+                person -> personService.save(person));
+        personLoader.loadItems();
     }
 
     private void loadMoviePositions() throws Exception {
-        TSVDataSource<MoviePosition> positions = new TSVDataSource<>("/datasource/test_crew.tsv",
-                record -> new MoviePosition(new Person(record.getString("nconst")), new Movie(record.getString("tconst")), record.getString("category")));
-        positions.getItems().forEach(item -> {
-            try {moviePositionService.save(item); }
-            catch (IllegalStateException e) {
-                logger.error("Couldn't save moviePosition for movie " + item.getMovie().getId() + ", postition " + item.getPerson().getId());
-            }
-        } );
+
+        TSVDataLoader<MoviePosition> positions = new TSVDataLoader<>(
+                "/datasource/title_principals_data.tsv",
+                record -> new MoviePosition(new Person(record.getString("nconst")), new Movie(record.getString("tconst")), record.getString("category")),
+                position -> moviePositionService.save(position));
+        positions.loadItems();
     }
 
     private void loadRating() throws Exception {
-        TSVDataSource<Rating> ratingParser = new TSVDataSource<>("/datasource/test_rating.tsv",
-                record -> new Rating(new Movie(record.getString("tconst")), record.getDouble("averageRating"), record.getLong("numVotes")));
-        ratingParser.getItems().forEach(item -> {
-            try {ratingService.save(item); }
-            catch (IllegalStateException e) {
-                logger.error("Couldn't save rating for movie " + item.getMovie().getId());
-            }
-        } );
+
+        TSVDataLoader<Rating> ratingLoader = new TSVDataLoader<>(
+                "/datasource/title_ratings_data.tsv",
+                record -> new Rating(new Movie(record.getString("tconst")), record.getDouble("averageRating"), record.getLong("numVotes")),
+                rating -> ratingService.save(rating));
+        ratingLoader.loadItems();
     }
 
     private void check() {

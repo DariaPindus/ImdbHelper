@@ -17,6 +17,7 @@ public class Person {
 
     @NotBlank
     @Getter @Setter
+    @Column(length = 350)
     private String name;
 
     @OneToMany(mappedBy = "person")

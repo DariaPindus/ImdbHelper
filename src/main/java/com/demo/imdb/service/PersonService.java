@@ -21,6 +21,11 @@ public class PersonService {
     private PersonRepository personRepository;
 
     @Transactional
+    public Person save(Person person) {
+        return personRepository.save(person);
+    }
+
+    @Transactional
     public Iterable<Person> saveAll(Iterable<Person> people) {
         return personRepository.saveAll(people);
     }
@@ -34,8 +39,8 @@ public class PersonService {
 
     @Transactional
     public int KevinBaconSeparationDegrees(String name) {
-        Optional<Person> person = personRepository.findOptionalByName(name.toLowerCase());
-        Optional<Person> kevinBacon = personRepository.findOptionalByName("Kevin Bacon".toLowerCase());
+        Optional<Person> person = personRepository.findFirstByName(name.toLowerCase());
+        Optional<Person> kevinBacon = personRepository.findFirstByName("Kevin Bacon".toLowerCase());
 
         if (!person.isPresent())
             return 0;
@@ -50,5 +55,6 @@ public class PersonService {
         return searcher.findRelationshipDegree(person.get().getId());
     }
 
-    private class KevinBaconNotFoundException extends IllegalStateException {}
+    private class KevinBaconNotFoundException extends IllegalStateException {
+    }
 }

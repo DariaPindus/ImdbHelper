@@ -30,10 +30,16 @@ public class MoviePositionService {
         Optional<Person> persistedPerson = personRepository.findById(moviePosition.getPerson().getId());
 
         if (!persistedMovie.isPresent() || !persistedPerson.isPresent())
-            throw new IllegalStateException(); //TODO: drugoi exception
+            throw new IllegalStateException();
 
         persistedMovie.get().getCast().add(moviePosition);
         persistedPerson.get().getMovies().add(moviePosition);
         return moviePositionRepository.save(new MoviePosition(moviePosition.getPerson(), persistedMovie.get(), moviePosition.getPosition()));
+    }
+
+    @Transactional
+    //TODO: delete
+    public void hardDelete() {
+        moviePositionRepository.deleteAll();
     }
 }
