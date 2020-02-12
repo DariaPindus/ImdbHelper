@@ -13,6 +13,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.function.Function;
+
 @Component
 public class DatabaseDataLoader implements ApplicationRunner {
 
@@ -37,7 +40,7 @@ public class DatabaseDataLoader implements ApplicationRunner {
 
     private void loadMovies() throws Exception {
         TSVDataLoader<Movie> movieLoader = new TSVDataLoader<>(
-                "/datasource/title_basics_data.tsv",
+                "/datasource/test_movies.tsv",
                 new MovieParser(),
                 movie -> movieService.save(movie));
         movieLoader.loadItems();
@@ -45,7 +48,7 @@ public class DatabaseDataLoader implements ApplicationRunner {
 
     private void loadPersons() throws Exception {
         TSVDataLoader<Person> personLoader = new TSVDataLoader<>(
-                "/datasource/name_basics_data.tsv",
+                "/datasource/test_actors.tsv",
                 record -> new Person(record.getString("nconst"), record.getString("primaryName")),
                 person -> personService.save(person));
         personLoader.loadItems();
@@ -54,7 +57,7 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private void loadMoviePositions() throws Exception {
 
         TSVDataLoader<MoviePosition> positions = new TSVDataLoader<>(
-                "/datasource/title_principals_data.tsv",
+                "/datasource/test_crew.tsv",
                 record -> new MoviePosition(new Person(record.getString("nconst")), new Movie(record.getString("tconst")), record.getString("category")),
                 position -> moviePositionService.save(position));
         positions.loadItems();
@@ -63,9 +66,10 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private void loadRating() throws Exception {
 
         TSVDataLoader<Rating> ratingLoader = new TSVDataLoader<>(
-                "/datasource/title_ratings_data.tsv",
+                "/datasource/test_rating.tsv",
                 record -> new Rating(new Movie(record.getString("tconst")), record.getDouble("averageRating"), record.getLong("numVotes")),
                 rating -> ratingService.save(rating));
         ratingLoader.loadItems();
     }
+
 }

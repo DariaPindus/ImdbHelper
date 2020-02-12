@@ -1,0 +1,35 @@
+loadMovies Ran in 397339100 ns
+loadPeson Ran in 22233000 ns
+loadMP Ran in 163446100 ns
+loadRating Ran in 92418700 ns
+
+checkTopRated Ran in 15481600 ns
+
+typecasted Ran in 31015700 ns
+
+separationDegree Ran in 16261700 ns
+
+=======with lazy ==================
+loadMovies Ran in 398737300 ns
+loadPeson Ran in 20421000 ns
+loadMP Ran in 163110000 ns
+loadRating Ran in 92469800 ns
+
+checkTopRated Ran in 21456700 ns
+
+typecasted Ran in 19311400 ns
+
+separationDegree Ran in 3953600 ns
+
+
+========without lazy================
+loadMovies Ran in 417159800 ns
+loadPeson Ran in 22988600 ns
+loadMP Ran in 180459200 ns
+loadRating Ran in 97630300 ns
+
+checkTopRated Ran in 13748600 ns
+
+typecasted Ran in 16482000 ns
+
+separationDegree Ran in 3517800 ns
