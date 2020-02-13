@@ -1,7 +1,10 @@
 package com.demo.imdb.service;
 
+import com.demo.imdb.model.Genre;
+import com.demo.imdb.model.Movie;
 import com.demo.imdb.model.Person;
 import com.demo.imdb.model.TypecastResult;
+import com.demo.imdb.repository.MovieRepository;
 import com.demo.imdb.repository.PersonRepository;
 import com.demo.imdb.service.relationships.PersonRelationshipSearcher;
 import com.demo.imdb.service.relationships.RelationshipsLoader;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +23,9 @@ public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private MovieRepository movieRepository;
 
     @Transactional
     public Person save(Person person) {
@@ -32,9 +39,11 @@ public class PersonService {
 
     @Transactional
     public boolean isPersonTypecasted(String name) {
-        List<TypecastResult> typecastResults = personRepository.countMoviesByGenre(name.toLowerCase());
-        long totalNumberOfMovies = personRepository.countPersonMovies(name.toLowerCase());
-        return typecastResults.stream().anyMatch(it -> it.getCnt() > totalNumberOfMovies / 2);
+        List<Movie> movies = movieRepository.findPersonMovie(name.toLowerCase());
+        Map<String, Long> genreCounts = movies.stream()
+                .flatMap(movie -> movie.getGenres().stream())
+                .collect(Collectors.groupingBy(Genre::getName, Collectors.counting()));
+        return genreCounts.entrySet().stream().anyMatch(pair -> pair.getValue() > (movies.size() / 2));
     }
 
     @Transactional

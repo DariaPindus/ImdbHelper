@@ -32,10 +32,12 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private RatingService ratingService;
 
     public void run(ApplicationArguments args) throws Exception {
-        loadMovies();
-        loadPersons();
-        loadMoviePositions();
-        loadRating();
+//        loadMovies();
+//        loadPersons();
+//        loadMoviePositions();
+//        loadRating();
+
+        //check();
     }
 
     private void loadMovies() throws Exception {
@@ -72,4 +74,35 @@ public class DatabaseDataLoader implements ApplicationRunner {
         ratingLoader.loadItems();
     }
 
+    private void check() {
+        executeElapsed("checkTopRated" , () -> {
+            List<Movie> genred = movieService.findTopRatedMoviesByGenre("animation");
+            System.out.println("");
+        });
+
+        executeElapsed("typecasted", () -> {
+            boolean res = personService.isPersonTypecasted("Brigitte Bardot");
+            System.out.println("");
+        });
+        executeElapsed("separationDegree", () -> {
+            int degree = personService.KevinBaconSeparationDegrees("Brigitte Bardot");
+            System.out.println("");
+        });
+
+    }
+
+    interface ElapseFunction {
+        void execute() throws Exception;
+    }
+
+    private void executeElapsed(String name, ElapseFunction function) {
+        long start = System.nanoTime();
+        try {
+            function.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        long end = System.nanoTime();
+        System.out.println(name + " Ran in " + (end - start) + " ns");
+    }
 }

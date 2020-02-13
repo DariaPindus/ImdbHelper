@@ -12,8 +12,6 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
-@Table(indexes = {@Index(name = "id_index",  columnList="id", unique = true),
-                @Index(name = "name_index", columnList="name", unique = false)})
 @NoArgsConstructor
 public class Movie {
 

@@ -39,6 +39,11 @@ public class MovieService {
 
     @Transactional
     public List<Movie> findTopRatedMoviesByGenre(String genre) {
-        return movieRepository.findTopRatedMoviesByGenre(genre.toLowerCase(), TOP_RATED_PAGE_REQUEST);
+        return movieRepository.findTopRatedMoviesByGenre(genre.toLowerCase());
+    }
+
+    @Transactional
+    public List<Movie> findPersonMovie(String name) {
+        return movieRepository.findPersonMovie(name);
     }
 }
