@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
+@Table(indexes = {@Index(name = "person_id_index",  columnList="id", unique = true),
+        @Index(name = "person_name_index", columnList="name", unique = false)})
 @NoArgsConstructor
 public class Person {
     @Id
