@@ -32,10 +32,10 @@ public class DatabaseDataLoader implements ApplicationRunner {
     private RatingService ratingService;
 
     public void run(ApplicationArguments args) throws Exception {
-//        loadMovies();
-//        loadPersons();
-//        loadMoviePositions();
-//        loadRating();
+        loadMovies();
+        loadPersons();
+        loadMoviePositions();
+        loadRating();
 
         //check();
     }
